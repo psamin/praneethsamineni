@@ -143,7 +143,7 @@ export const projects: Project[] = [
     details:
       "I'm CEO & CTO. I also built its website (Vite, React, TypeScript, shadcn) with Team, Events and Contact pages.",
     points: ["250+ students reached across 6 chapters in 3 states", "2,250+ hours of tutoring, 12+ workshops, 75+ hackathon participants"],
-    when: "2025–present",
+    when: "Jul 2023 – present",
     repo: gh("code-for-all-ngn"),
     links: [{ label: "codingforachangenpo.org", href: "https://codingforachangenpo.org" }],
     image: { src: img("workshop.webp"), alt: "Praneeth presenting a Coding for a Change workshop in a classroom" },
