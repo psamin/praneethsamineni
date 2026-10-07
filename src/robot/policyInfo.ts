@@ -51,6 +51,10 @@ export const policyRows: Record<PolicyType, [string, string][]> = {
 
 /** The line under the demo that links to the explainer. */
 const SHORT: Record<PolicyType, string> = { mlp: "MLP", diffusion: "diffusion", act: "ACT" };
-const CAPTION = `this ${SHORT[type]} policy allows the robot to dribble the ball to the goal, live in your browser`;
+const CAPTION = {
+  lead: "this ",
+  highlight: `${SHORT[type]} policy`,
+  rest: " allows the robot to dribble the ball to the goal, live in your browser",
+};
 
-export const thisPolicy = { type, summary: policySummary[type], rows: policyRows[type], caption: CAPTION, name: NAMES[type] };
+export const thisPolicy = { type, summary: policySummary[type], rows: policyRows[type], caption: CAPTION };

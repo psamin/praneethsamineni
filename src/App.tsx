@@ -103,13 +103,14 @@ function HomePage() {
         </div>
       </section>
 
-      <section id="demo" className="sec">
-        <h2>{thisPolicy.name}</h2>
+      <section id="demo" className="sec sec-plain">
         <div className="sec-body">
           <BallPushDemo />
           <p className="demo-link">
             <a href={href("/policy")} onClick={navigate}>
-              {thisPolicy.caption} · see how it works <span className="arrow" aria-hidden="true">→</span>
+              {thisPolicy.caption.lead}
+              <span className="demo-policy">{thisPolicy.caption.highlight}</span>
+              {thisPolicy.caption.rest} · see how it works <span className="arrow" aria-hidden="true">→</span>
             </a>
           </p>
         </div>
