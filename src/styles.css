@@ -694,6 +694,10 @@ a:hover .arrow {
   background: var(--rule);
 }
 
+.feature-image video {
+  pointer-events: none; /* a tap never opens the system video player */
+}
+
 .feature-image img,
 .feature-image video {
   display: block;

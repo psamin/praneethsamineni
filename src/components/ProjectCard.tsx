@@ -1,5 +1,6 @@
 import { lazy, Suspense, useId, useState } from "react";
 import type { Project } from "../data/projects";
+import InlineVideo from "./InlineVideo";
 
 const ShakespeareSampler = lazy(() => import("./ShakespeareSampler"));
 
@@ -49,7 +50,7 @@ export function FeaturedProject({ p }: { p: Project }) {
               </svg>
             </a>
           ) : p.image.video ? (
-            <video src={p.image.video} poster={p.image.src} aria-label={p.image.alt} autoPlay muted loop playsInline preload="none" />
+            <InlineVideo src={p.image.video} poster={p.image.src} label={p.image.alt} />
           ) : (
             <img src={p.image.src} alt={p.image.alt} loading="lazy" decoding="async" />
           )}
