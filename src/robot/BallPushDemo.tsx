@@ -1,9 +1,8 @@
-import { Fragment, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Sim, clampToArena, config as C, sampleScene, type Scene, type Vec } from "./simulation";
 import { TinyPolicy, type PolicyFile } from "./tinyPolicy";
 import weights from "./policyWeights.json";
 import verified from "./scenes.json";
-import { thisPolicy } from "./policyInfo";
 
 const W = C.WORLD_MAX_X - C.WORLD_MIN_X;
 const H = C.WORLD_MAX_Y - C.WORLD_MIN_Y;
@@ -47,7 +46,6 @@ export default function BallPushDemo() {
     () => typeof matchMedia !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches,
   );
   const [hz, setHz] = useState(0);
-  const [showInfo, setShowInfo] = useState(false);
 
   // mutable sim state lives in a ref; React only renders the chrome
   const st = useRef({
@@ -163,7 +161,7 @@ export default function BallPushDemo() {
     };
     raf = requestAnimationFrame(frame);
 
-    // ---- interaction: click the robot for its spec, drag the ball, click elsewhere to move the goal
+    // ---- interaction: drag the ball, click anywhere else to move the goal
     const toWorld = (e: PointerEvent): Vec => {
       const r = canvas.getBoundingClientRect();
       return [(e.clientX - r.left) / scale, (e.clientY - r.top) / scale];
@@ -183,9 +181,7 @@ export default function BallPushDemo() {
       s.pointer = toWorld(e); // the robot's eyes follow the cursor
       if (!s.dragBall) {
         const p = toWorld(e);
-        canvas.style.cursor = near(p, s.sim.rx, s.sim.ry, C.ROBOT_RADIUS * 1.4)
-          ? "pointer"
-          : near(p, s.sim.bx, s.sim.by, C.BALL_RADIUS * 2.2) ? "grab" : "crosshair";
+        canvas.style.cursor = near(p, s.sim.bx, s.sim.by, C.BALL_RADIUS * 2.2) ? "grab" : "crosshair";
         return;
       }
       const [x, y] = clampToArena(toWorld(e), C.BALL_RADIUS);
@@ -203,8 +199,6 @@ export default function BallPushDemo() {
         s.sim.steps = 0; s.sim.hold = 0; s.best = Infinity;
         replan();
         s.resetPending = false;
-      } else if (downAt && near(p, downAt[0], downAt[1], 6) && near(p, s.sim.rx, s.sim.ry, C.ROBOT_RADIUS * 1.4)) {
-        setShowInfo((v) => !v);
       } else if (downAt && near(p, downAt[0], downAt[1], 6)) {
         const [gx, gy] = clampToArena(p, C.GOAL_SPAWN_MARGIN);
         s.sim.gx = gx; s.sim.gy = gy;
@@ -240,32 +234,6 @@ export default function BallPushDemo() {
           aria-label="A small robot head pushing a soccer ball toward a goal circle, controlled by a tiny neural network running in your browser"
         />
       </div>
-      {showInfo && (
-        <div className="policy-card" role="dialog" aria-label="What's driving the robot">
-          <div className="policy-card-head">
-            <span>What's driving the robot</span>
-            <button type="button" aria-label="Close" onClick={() => setShowInfo(false)}>&times;</button>
-          </div>
-          <dl>
-            {thisPolicy.rows.slice(0, 1).map(([k, v]) => <Fragment key={k}><dt>{k}</dt><dd>{v}</dd></Fragment>)}
-            <dt>Sees</dt>
-            <dd>6 numbers: robot, ball and goal x/y, scaled to −1…1. State only, no camera.</dd>
-            {thisPolicy.rows.slice(1).map(([k, v]) => <Fragment key={k}><dt>{k}</dt><dd>{v}</dd></Fragment>)}
-            <dt>Rate</dt>
-            <dd>{Math.round(1 / ACTION_DT)} decisions/s · physics at {Math.round(1 / C.PHYSICS_DT)} Hz</dd>
-            <dt>Trained on</dt>
-            <dd>
-              A scripted geometric expert's actions (MSE loss), with DART noise injection and {m.dagger_rounds} DAgger
-              rounds · {(m.train_samples / 1e6).toFixed(2)}M state→action pairs
-            </dd>
-            <dt>Tested</dt>
-            <dd>
-              {(m.success_rate * 100).toFixed(1)}% of {m.eval_episodes.toLocaleString()} unseen scenes
-              {m.pymunk_success_rate && <> · {(m.pymunk_success_rate * 100).toFixed(1)}% in Pymunk (an engine it never trained in)</>}
-            </dd>
-          </dl>
-        </div>
-      )}
       <div className="robot-bar">
         <ul className="robot-stats">
           <li><b>{policy.params.toLocaleString()}</b> parameters</li>

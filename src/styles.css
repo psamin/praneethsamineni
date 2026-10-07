@@ -486,52 +486,6 @@ main {
   box-shadow: none;
 }
 
-/* spec readout that opens when the robot is clicked */
-.policy-card {
-  margin-top: 12px;
-  padding: 12px 14px 14px;
-  border: 2px dashed #2c4a3a;
-  color: var(--phosphor);
-}
-
-.policy-card-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-  font: 12px/1.4 var(--pixel);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--amber);
-}
-
-.policy-card-head button {
-  border: 0;
-  background: none;
-  color: var(--phosphor);
-  font: 22px/1 var(--sans);
-  cursor: pointer;
-}
-
-.policy-card dl {
-  display: grid;
-  grid-template-columns: 100px minmax(0, 1fr);
-  gap: 8px 16px;
-  margin: 0;
-  font: 13px/1.55 var(--mono);
-}
-
-.policy-card dt {
-  font: 11px/1.7 var(--pixel);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: #5f8f74;
-}
-
-.policy-card dd {
-  margin: 0;
-}
-
 /* the line under the cabinet: back to the elegant page */
 .demo-link {
   margin: 14px 0 0;

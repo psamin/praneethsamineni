@@ -30,25 +30,6 @@ export const policySummary: Record<PolicyType, string> = {
     "positions of the robot, the ball and the goal, and overlapping predictions are averaged every step (temporal ensembling).",
 };
 
-/** Rows for the spec panel. */
-export const policyRows: Record<PolicyType, [string, string][]> = {
-  mlp: [
-    ["Policy", "Deterministic MLP trained by behaviour cloning (imitation learning). Not RL, diffusion, or a transformer."],
-    ["Network", `${policyMeta.architecture}, ReLU · ${policyMeta.params.toLocaleString()} params · float32`],
-    ["Outputs", "One target velocity (vx, vy) per decision, capped at max speed and acceleration-limited"],
-  ],
-  diffusion: [
-    ["Policy", "Diffusion Policy (Chi et al., 2023), state-based and scaled down. Trained by imitation; no RL."],
-    ["Network", `MLP noise-predictor ${policyMeta.architecture} · ${policyMeta.params.toLocaleString()} params · float32`],
-    ["Outputs", "A chunk of 8 velocities, denoised in 10 DDIM steps; the first 4 are executed, then it replans"],
-  ],
-  act: [
-    ["Policy", "ACT (Zhao et al., 2023), scaled down: transformer + CVAE training, action chunking. Trained by imitation; no RL."],
-    ["Network", `${policyMeta.architecture} · ${policyMeta.params.toLocaleString()} params · float32 (CVAE encoder is training-only)`],
-    ["Outputs", "A chunk of 8 velocities every step; overlapping chunks are averaged with exponential weights"],
-  ],
-};
-
 /** The line under the demo that links to the explainer. */
 const SHORT: Record<PolicyType, string> = { mlp: "MLP", diffusion: "diffusion", act: "ACT" };
 const CAPTION = {
@@ -57,4 +38,4 @@ const CAPTION = {
   rest: " allows the robot to dribble the ball to the goal, live in your browser",
 };
 
-export const thisPolicy = { type, summary: policySummary[type], rows: policyRows[type], caption: CAPTION };
+export const thisPolicy = { type, summary: policySummary[type], caption: CAPTION };
