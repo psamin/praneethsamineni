@@ -1,0 +1,8 @@
+[project]
+name = "tiny-push-policy"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = ["numpy>=2.0", "torch>=2.4", "pymunk>=6.8"]
+
+[tool.uv]
+package = false

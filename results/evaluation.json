@@ -1,0 +1,118 @@
+{
+  "n_episodes": 2000,
+  "eval_seed_start": 300000,
+  "models": {
+    "abs_32": {
+      "episodes": 2000,
+      "success_rate": 0.904,
+      "mean_steps_to_success": 221.46902654867256,
+      "median_steps_to_success": 204.5,
+      "mean_final_distance": 30.553325845075076,
+      "near_wall_episodes": 596,
+      "near_wall_failure_rate": 0.20973154362416108,
+      "ball_touched_wall_rate": 0.028,
+      "params": 1346,
+      "val_mse": 0.04171925038099289,
+      "train_samples": 2343361,
+      "dagger_rounds": 6
+    },
+    "abs_32_bc": {
+      "episodes": 2000,
+      "success_rate": 0.314,
+      "mean_steps_to_success": 172.6656050955414,
+      "median_steps_to_success": 161.0,
+      "mean_final_distance": 148.5327937290049,
+      "near_wall_episodes": 596,
+      "near_wall_failure_rate": 0.6560402684563759,
+      "ball_touched_wall_rate": 0.324,
+      "params": 1346,
+      "val_mse": 0.04027218371629715,
+      "train_samples": 678840,
+      "dagger_rounds": 0
+    },
+    "abs_64": {
+      "episodes": 2000,
+      "success_rate": 0.941,
+      "mean_steps_to_success": 218.0441020191286,
+      "median_steps_to_success": 210.0,
+      "mean_final_distance": 20.930956764284147,
+      "near_wall_episodes": 596,
+      "near_wall_failure_rate": 0.13590604026845637,
+      "ball_touched_wall_rate": 0.0145,
+      "params": 4738,
+      "val_mse": 0.02297227643430233,
+      "train_samples": 2081304,
+      "dagger_rounds": 6
+    },
+    "abs_64_bc": {
+      "episodes": 2000,
+      "success_rate": 0.58,
+      "mean_steps_to_success": 287.21379310344827,
+      "median_steps_to_success": 281.0,
+      "mean_final_distance": 38.17198898348123,
+      "near_wall_episodes": 596,
+      "near_wall_failure_rate": 0.4664429530201342,
+      "ball_touched_wall_rate": 0.0675,
+      "params": 4738,
+      "val_mse": 0.029711715877056122,
+      "train_samples": 678840,
+      "dagger_rounds": 0
+    }
+  },
+  "expert": {
+    "episodes": 2000,
+    "success_rate": 0.999,
+    "mean_steps_to_success": 204.37287287287288,
+    "median_steps_to_success": 199.0,
+    "mean_final_distance": 11.087062018191991,
+    "near_wall_episodes": 596,
+    "near_wall_failure_rate": 0.003355704697986577,
+    "ball_touched_wall_rate": 0.001
+  },
+  "pymunk_crosscheck": {
+    "abs_64": {
+      "expert": {
+        "episodes": 1000,
+        "success_rate": 0.999,
+        "mean_steps_to_success": 172.5065065065065,
+        "median_steps_to_success": 164,
+        "mean_final_distance": 9.505803947190117,
+        "near_wall_episodes": 287,
+        "near_wall_failure_rate": 0.003484320557491289,
+        "ball_touched_wall_rate": 0.001
+      },
+      "policy": {
+        "episodes": 1000,
+        "success_rate": 0.968,
+        "mean_steps_to_success": 171.4638429752066,
+        "median_steps_to_success": 158.5,
+        "mean_final_distance": 15.190211477469795,
+        "near_wall_episodes": 287,
+        "near_wall_failure_rate": 0.08013937282229965,
+        "ball_touched_wall_rate": 0.0
+      }
+    },
+    "abs_32": {
+      "expert": {
+        "episodes": 1000,
+        "success_rate": 0.999,
+        "mean_steps_to_success": 172.5065065065065,
+        "median_steps_to_success": 164,
+        "mean_final_distance": 9.505803947190117,
+        "near_wall_episodes": 287,
+        "near_wall_failure_rate": 0.003484320557491289,
+        "ball_touched_wall_rate": 0.001
+      },
+      "policy": {
+        "episodes": 1000,
+        "success_rate": 0.964,
+        "mean_steps_to_success": 173.65352697095435,
+        "median_steps_to_success": 164.0,
+        "mean_final_distance": 21.671619355082523,
+        "near_wall_episodes": 287,
+        "near_wall_failure_rate": 0.08710801393728224,
+        "ball_touched_wall_rate": 0.014
+      }
+    }
+  }
+}

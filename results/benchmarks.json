@@ -1,0 +1,13 @@
+{
+  "model": "abs_32",
+  "params": 1346,
+  "raw_float32_bytes": 5384,
+  "json_bytes": 7622,
+  "json_gzip_bytes": 5708,
+  "success_rate": 0.904,
+  "type": "mlp",
+  "js_inference_us_median": 1.6571,
+  "js_sim_step_us": 0.334,
+  "js_runtime": "node v22.19.0 (V8), M3 Pro",
+  "site_js_gzip_bytes": 40590
+}

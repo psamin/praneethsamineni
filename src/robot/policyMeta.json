@@ -1,0 +1,15 @@
+{
+  "model": "abs_32",
+  "type": "mlp",
+  "architecture": "6 → 32 → 32 → 2",
+  "params": 1346,
+  "weight_bytes": 5384,
+  "success_rate": 0.904,
+  "eval_episodes": 2000,
+  "median_steps": 204.5,
+  "features": "abs",
+  "dagger_rounds": 6,
+  "train_samples": 2343361,
+  "pymunk_success_rate": 0.964,
+  "exported": "2026-10-07"
+}
