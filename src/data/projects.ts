@@ -12,7 +12,6 @@ export type Project = {
   details: string;
   points?: string[];
   when: string;
-  tags: string[];
   /** GitHub URL, or null for a private repo */
   repo: string | null;
   links?: { label: string; href: string }[];
@@ -42,12 +41,10 @@ export const projects: Project[] = [
     details:
       "A phone camera streams frames into a perception pipeline. YOLOE open-vocabulary detection and BoT-SORT tracking feed a “put-down gate” that fires when an object comes to rest, and Claude then describes where the object landed and logs it to memory. A voice agent (Deepgram STT/TTS over one WebSocket, with Claude tool calls) answers questions like “where are my pills?” It also handles medication doses and reminders, Google Calendar, face recognition and a caregiver dashboard. A 5-motor arm runs an ACT imitation policy: it grabs the bottle, turns, says “Here are your pills,” drops them in your hand and returns home.",
     points: [
-      "ACT policy trained on 31 teleoperated episodes (15,246 frames at 30 fps)",
-      "Gripper timing correct in 31/31 episodes",
+      "ACT policy trained on 51 teleoperated episodes",
       "YOLOE + BoT-SORT perception, Claude + Deepgram voice agent",
     ],
     when: "Sep 2026 · HackMIT",
-    tags: ["Robotics", "LeRobot ACT", "YOLOE", "Claude", "Deepgram"],
     repo: gh("hackmit"),
     image: { src: img("pam-poster.webp"), video: img("pam.mp4"), alt: "Pam's robot arm on a table next to Praneeth, who is holding a phone" },
   },
@@ -65,7 +62,6 @@ export const projects: Project[] = [
       "Zero tasks lost when a database node is killed",
     ],
     when: "Jul–Aug 2026 · AWS × Cockroach Labs Hackathon",
-    tags: ["Multi-robot", "CockroachDB", "AWS Bedrock", "FastAPI", "Three.js"],
     repo: gh("project_flock"),
     image: { src: img("colony.webp"), alt: "Colony's 3D digital twin of the disaster site, with robot positions, live fleet stats and the commander console" },
   },
@@ -82,7 +78,6 @@ export const projects: Project[] = [
       "Task-aware: the same approaching person triggers a cue during assessment but not during CPR",
     ],
     when: "Sep 2026 · HackGT",
-    tags: ["MediaPipe", "Expo", "Computer vision"],
     repo: null,
     links: [{ label: "Demo video", href: "https://youtu.be/ppUjg5_QX-s" }],
     image: {
@@ -105,7 +100,6 @@ export const projects: Project[] = [
       "Target: under 33 ms end-to-end inference on the FPGA",
     ],
     when: "Oct 2026",
-    tags: ["MuJoCo", "PyTorch", "Quantization", "FPGA", "Slurm"],
     repo: gh("robotfpga"),
   },
   {
@@ -116,7 +110,6 @@ export const projects: Project[] = [
     details:
       "A decoder-only transformer from Attention Is All You Need: multi-head causal self-attention, pre-LayerNorm residual blocks, learned position embeddings and a 4× MLP. It's 6 layers, 6 heads, 384-dim embeddings and a 256-character context, trained on Tiny Shakespeare. The code follows Karpathy's tutorial closely. I trained it for 5,000 steps (about 25 minutes on one NVIDIA L4) to a validation loss of 1.56. Below are unedited samples from that run.",
     when: "Jul 2026",
-    tags: ["PyTorch", "Transformers", "Language models"],
     repo: gh("transformers"),
     links: [{ label: "Karpathy's tutorial", href: "https://www.youtube.com/watch?v=kCc8FmEb1nY" }],
     extra: "shakespeare",
@@ -129,7 +122,6 @@ export const projects: Project[] = [
     details:
       "Inbound and outbound calls run through Vapi with a custom LLM endpoint that calls Claude. A Temporal worker handles post-call processing (recording, transcript, scored lead, CRM push). An Express server handles webhooks and signed leads from the marketing site. A React console covers leads, cases, live call monitoring with human takeover, campaigns, do-not-call lists, callbacks, retainer e-signature and a client portal. I made the majority of the roughly 1,600 commits.",
     when: "Jun–Jul 2026",
-    tags: ["TypeScript", "Vapi", "Claude", "Temporal", "Postgres", "GCP"],
     repo: null,
   },
   {
@@ -141,7 +133,6 @@ export const projects: Project[] = [
       "A full-stack farm-management web app: CRUD for crops, finances, soil data, reminders and field plots on Google Maps, with JWT and Google OAuth. Its leaf-analysis endpoint runs a TensorFlow/Keras CNN trained on PlantVillage, and the prediction feeds an AI-generated health report (PDF). There's also an AI chatbot.",
     points: ["2nd place internationally, TSA Software Development", "CNN accuracy 86% after tuning"],
     when: "Jun 2025 · TSA",
-    tags: ["TensorFlow", "React", "TypeScript", "Flask"],
     repo: gh("crop2.0"),
   },
   {
@@ -154,7 +145,6 @@ export const projects: Project[] = [
       "I'm CEO & CTO. I also built its website (Vite, React, TypeScript, shadcn) with Team, Events and Contact pages.",
     points: ["250+ students reached across 6 chapters in 3 states", "2,250+ hours of tutoring, 12+ workshops, 75+ hackathon participants"],
     when: "2025–present",
-    tags: ["Nonprofit", "Education", "React"],
     repo: gh("code-for-all-ngn"),
     links: [{ label: "codingforachangenpo.org", href: "https://codingforachangenpo.org" }],
     image: { src: img("workshop.webp"), alt: "Praneeth presenting a Coding for a Change workshop in a classroom" },
@@ -167,7 +157,6 @@ export const projects: Project[] = [
     details:
       "A 2D contact simulator written twice, in Python and TypeScript, and checked to agree within 1e-9. A scripted geometric expert generates the demonstrations. A tiny MLP is trained with behaviour cloning plus DART and DAgger, with no RL. The forward pass is hand-written TypeScript, so there's no ML runtime.",
     when: "Oct 2026",
-    tags: ["PyTorch", "Imitation learning", "TypeScript", "React"],
     repo: gh("praneethsamineni"),
   },
   {
@@ -178,7 +167,6 @@ export const projects: Project[] = [
     details:
       "I'm adding NVTX ranges, a flashdreams-profile command, an IProfiler interface for per-stage metrics, stage timings stored on the pipeline cache, and frame-rate reporting. That last part includes a fix for an overstated frame rate. The work is on my fork and not yet merged upstream.",
     when: "Sep 2026",
-    tags: ["PyTorch", "CUDA", "NVTX", "Open source"],
     repo: "https://github.com/psamin/flashdreams/tree/nvtx-profiling",
   },
   {
@@ -188,7 +176,6 @@ export const projects: Project[] = [
     details:
       "You photograph an object, Gemini Vision identifies it, and the app returns the English word, the Tamil word and a transliteration. Words go into a personal word bank that feeds flashcards, quizzes, streaks, achievements and stats. It has JWT auth and an admin dashboard. Built with Next.js 15, Flask, SQLAlchemy and Postgres.",
     when: "2025–2026",
-    tags: ["Gemini", "Next.js", "Flask", "Postgres"],
     repo: gh("tamil-lens2.0"),
   },
   {
@@ -198,7 +185,6 @@ export const projects: Project[] = [
     details:
       "MedBill extracts line items from PDF bills with pdfplumber, falling back to Claude Haiku. It compares each charge against Medicare rates from the live CMS data API to calculate overbilling. Cases then move through a role-based workflow between law firm, provider and funder, with negotiated CPT rates and funding batches. Built in two days.",
     when: "Jun 2026",
-    tags: ["Flask", "Claude", "Next.js", "Docker"],
     repo: gh("medbill"),
     links: [{ label: "Demo video", href: "https://youtu.be/oXoKcJ_Ne78" }],
   },
@@ -209,7 +195,6 @@ export const projects: Project[] = [
     details:
       "Prompts live in the repo and are pushed to the assistant with a sync command. An end-of-call webhook saves clients, cases, calls and intake fields to SQLite or Postgres. A CRM layer handles tasks, communications, an audit log and do-not-call opt-outs. After the call, MedVoice emails a prefilled 5-step intake form behind a token link and sends reminders.",
     when: "Jun 2026",
-    tags: ["Vapi", "Node", "Postgres", "Next.js"],
     repo: gh("medvoicevapi"),
   },
   {
@@ -219,7 +204,6 @@ export const projects: Project[] = [
     details:
       "A Flask backend sends raw intake notes, typed or spoken through the browser's Web Speech API, to Claude with a Pydantic schema. It returns a structured case summary, missing fields, follow-up tasks and a completeness score. Staff review and edit everything in a Next.js dashboard (human in the loop).",
     when: "May 2026",
-    tags: ["Claude", "Pydantic", "Flask", "Next.js"],
     repo: gh("waycoReplica"),
     links: [{ label: "Demo video", href: "https://youtu.be/o-id4jpo5ho" }],
   },
@@ -230,7 +214,6 @@ export const projects: Project[] = [
     details:
       "A resumable GitHub GraphQL backfill into SQLite, with linked-PR reconciliation. Scoring runs in two tiers: a cheap heuristic first, then LLM enrichment through Ollama or Claude with schema validation and a cost log. A Next.js ranked table has a short-term vs long-term timeline slider, filters and a detail drawer.",
     when: "Jul 2026",
-    tags: ["TypeScript", "GraphQL", "SQLite", "LLMs"],
     repo: gh("opensourceissues"),
   },
   {
@@ -240,7 +223,6 @@ export const projects: Project[] = [
     details:
       "RepoLaunch audits the open workspace locally, with no network or telemetry, against 14 weighted checks (README, install docs, license, tests, CI, …). It detects the framework and shows a score card in a sidebar. It generates missing files (CONTRIBUTING, SECURITY, issue templates, CI workflows) behind a diff preview, or hands fixes to Claude Code.",
     when: "Jun 2026",
-    tags: ["VS Code API", "TypeScript", "Vitest"],
     repo: gh("RepoLaunch"),
   },
   {
@@ -250,7 +232,6 @@ export const projects: Project[] = [
     details:
       "An Express backend sources candidates through Claude web search and scores them. You review them one card at a time and click Yes, Maybe or No. Approved and Maybe candidates are appended to Google Sheets through a service account. It deliberately doesn't scrape LinkedIn.",
     when: "Jun 2026",
-    tags: ["TypeScript", "Claude", "Google Sheets API", "Next.js"],
     repo: gh("recruiter"),
   },
   {
@@ -260,7 +241,6 @@ export const projects: Project[] = [
     details:
       "Home, services, story, recruitment (job listings) and contact pages, with an EmailJS contact form. Deployed on GitHub Pages under the firm's domain.",
     when: "2025–2026",
-    tags: ["React", "Vite", "Tailwind"],
     repo: gh("fiskeritinc"),
     links: [{ label: "fiskeritinc.com", href: "https://fiskeritinc.com" }],
   },
@@ -271,7 +251,6 @@ export const projects: Project[] = [
     details:
       "Dictated text is split into tasks on commas, periods and the words “then” and “next”. Times like “7am” or “from 2 to 3pm” are detected and the day is sorted by time. It has vim-style keys and one list per day, stored as local JSON. A Swift wrapper and a LaunchAgent keep it running. Zero dependencies.",
     when: "Jun 2026",
-    tags: ["JavaScript", "Node", "Swift", "macOS"],
     repo: gh("tasks"),
   },
 ];

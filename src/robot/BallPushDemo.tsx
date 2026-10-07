@@ -69,6 +69,7 @@ export default function BallPushDemo() {
     hzCount: 0,
     hzStart: 0,
     lastBall: null as [number, number] | null,
+    pointer: null as Vec | null,
   });
   st.current.paused = paused;
 
@@ -177,7 +178,9 @@ export default function BallPushDemo() {
       }
     };
     const near = (p: Vec, x: number, y: number, r: number) => Math.hypot(p[0] - x, p[1] - y) < r;
+    const onLeave = () => (s.pointer = null);
     const onMove = (e: PointerEvent) => {
+      s.pointer = toWorld(e); // the robot's eyes follow the cursor
       if (!s.dragBall) {
         const p = toWorld(e);
         canvas.style.cursor = near(p, s.sim.rx, s.sim.ry, C.ROBOT_RADIUS * 1.4)
@@ -214,6 +217,7 @@ export default function BallPushDemo() {
     canvas.addEventListener("pointerdown", onDown);
     canvas.addEventListener("pointermove", onMove);
     canvas.addEventListener("pointerup", onUp);
+    canvas.addEventListener("pointerleave", onLeave);
 
     return () => {
       cancelAnimationFrame(raf);
@@ -222,6 +226,7 @@ export default function BallPushDemo() {
       canvas.removeEventListener("pointerdown", onDown);
       canvas.removeEventListener("pointermove", onMove);
       canvas.removeEventListener("pointerup", onUp);
+      canvas.removeEventListener("pointerleave", onLeave);
     };
   }, [policy]);
 
@@ -294,6 +299,7 @@ type Theme = ReturnType<typeof readTheme>;
 type DrawState = {
   prev: Snap | null; cur: Snap | null; sim: Sim; trail: [number, number][];
   celebrateAt: number; resetPending: boolean; spin: number; lastBall: [number, number] | null;
+  pointer: Vec | null;
 };
 
 function draw(ctx: CanvasRenderingContext2D, s: DrawState, alpha: number, now: number, t: Theme) {
@@ -364,10 +370,10 @@ function draw(ctx: CanvasRenderingContext2D, s: DrawState, alpha: number, now: n
     ctx.restore();
   }
 
-  drawRobot(ctx, rx, ry, vx, vy, now, t);
+  drawRobot(ctx, rx, ry, vx, vy, now, t, s.pointer);
 }
 
-function drawRobot(ctx: CanvasRenderingContext2D, x: number, y: number, vx: number, vy: number, now: number, t: Theme) {
+function drawRobot(ctx: CanvasRenderingContext2D, x: number, y: number, vx: number, vy: number, now: number, t: Theme, look: Vec | null) {
   const R = C.ROBOT_RADIUS;
   const sp = Math.hypot(vx, vy);
   const k = Math.min(sp / C.MAX_ROBOT_SPEED, 1);
@@ -409,7 +415,10 @@ function drawRobot(ctx: CanvasRenderingContext2D, x: number, y: number, vx: numb
 
   // eyes look where it's going; blink every few seconds
   const blink = (now % 4200) < 120 ? 0.15 : 1;
-  const ex = ux * 3 * k, ey = uy * 2 * k;
+  // eyes look at the cursor if it's over the arena, otherwise where it's going
+  const lx = look ? look[0] - x : 0, ly = look ? look[1] - y : 0, ld = Math.hypot(lx, ly);
+  const ex = look && ld > 1 ? (lx / ld) * 3 : ux * 3 * k;
+  const ey = look && ld > 1 ? (ly / ld) * 2 : uy * 2 * k;
   ctx.fillStyle = t.accent;
   ctx.shadowColor = t.accent;
   ctx.shadowBlur = 6;

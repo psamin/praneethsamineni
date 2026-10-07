@@ -1,6 +1,7 @@
 // Real samples from my training run of the char-level GPT, generated offline
 // (the 10.8M-param model is too big to ship for a portfolio page).
-// Typed out character by character to show how it generates.
+// Typed out character by character, then the next sample starts on its own.
+// Typing pauses while the panel is off-screen.
 import { useEffect, useRef, useState } from "react";
 import gpt from "../data/shakespeare.json";
 
@@ -17,15 +18,28 @@ export default function ShakespeareSampler() {
 function Sampler() {
   const [i, setI] = useState(0);
   const [n, setN] = useState(0);
+  const [visible, setVisible] = useState(true);
   const box = useRef<HTMLPreElement>(null);
   const text = run.samples[i].trim();
+  const reduced = typeof matchMedia !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   useEffect(() => {
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) { setN(text.length); return; }
-    setN(0);
-    const id = setInterval(() => setN((k) => (k >= text.length ? k : k + 3)), 16);
-    return () => clearInterval(id);
-  }, [text]);
+    const io = new IntersectionObserver(([e]) => setVisible(e.isIntersecting));
+    if (box.current) io.observe(box.current);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => setN(reduced ? text.length : 0), [text, reduced]);
+
+  useEffect(() => {
+    if (reduced || !visible) return;
+    if (n >= text.length) {
+      const id = setTimeout(() => setI((k) => (k + 1) % run.samples.length), 2500); // next sample
+      return () => clearTimeout(id);
+    }
+    const id = setTimeout(() => setN((k) => Math.min(text.length, k + 2)), 22);
+    return () => clearTimeout(id);
+  }, [n, text, visible, reduced]);
 
   useEffect(() => {
     if (box.current) box.current.scrollTop = box.current.scrollHeight;
@@ -38,7 +52,7 @@ function Sampler() {
           sample {i + 1}/{run.samples.length} · {run.params_M.toFixed(1)}M params · val loss {run.val_loss?.toFixed(2)}
         </span>
         <button type="button" onClick={() => setI((i + 1) % run.samples.length)}>
-          ↻ another
+          next ↻
         </button>
       </div>
       <pre ref={box} className="sampler-text" aria-live="off">

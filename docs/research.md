@@ -189,12 +189,26 @@ Closed-loop evaluation uses 2,000 unseen random scenes (seeds 300000+), so the
   TypeScript code and requires success, so the demo can't stall on a scene it
   picks itself. The success rate reported on the site is still the unfiltered
   90.4%.
-* **Diffusion Policy and ACT.** Scaled-down versions were trained with the
-  same recipe (`train_chunked.py`). A diffusion denoiser with 7k parameters
-  reached only about 3% closed-loop success, even after 8× more training. At
-  this size it can't model the action distribution well enough at every noise
-  level. Results for the larger diffusion model and for ACT are added to
-  `results/evaluation.json` when that job completes.
+* **Diffusion Policy and ACT, same data and recipe** (`train_chunked.py`; 8-step
+  action chunks; diffusion executes 4 then replans with 10 DDIM steps; ACT uses
+  temporal ensembling; 3 DAgger rounds):
+
+  | Model | Params | Copying only | + DAgger |
+  |---|---|---|---|
+  | Diffusion, 64-wide denoiser | 7,184 | 3.1% | 6.5% |
+  | Diffusion, 128-wide denoiser | 22,544 | 45.8% | 90.1% |
+  | ACT, d=32, 2 layers | 18,050 | 92.8% | 94.9% |
+  | ACT, d=64, 2 layers | 68,866 | 94.3% | **95.6%** |
+
+  ACT's action chunking almost removes the compounding-error gap on its own:
+  plain copying reaches 93% against the MLP's 31%. Predicting 8 steps ahead and
+  averaging the overlapping predictions smooths over the hesitation points
+  where a single-step policy stalls. Diffusion needs capacity. At 7k parameters
+  the denoiser can't model the action distribution at every noise level; at
+  22k it matches the small MLP, but with 17× the parameters and 10 network
+  passes per decision. The shipped MLP stays, because it is by far the smallest
+  and the verified scene list makes the demo reliable. ACT d=32 (about 70 KB) is
+  the choice if robustness on user-set scenes matters more than size.
 * **Inference.** Measured on the earlier 64-wide model: 5.4 µs median per
   decision in V8 (Node 22, M3 Pro). The 32-wide model does about 3.5× less
   arithmetic. Both are far under the 0.1 ms target. The site measures the

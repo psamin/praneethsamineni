@@ -68,11 +68,11 @@ export default function App() {
         <div className="wrap" id="top">
           <page.Component />
           <blockquote className="quote">
-            <p>&ldquo;If you believe in robotics,<br />robotics will believe in you.&rdquo;</p>
+            <p>If you believe in robotics, <br />robotics will believe in you.&rdquo;</p>
             <cite>Jim Fan</cite>
           </blockquote>
           <blockquote className="quote">
-            <p>&ldquo;If you believe in deep learning,<br />deep learning will believe in you.&rdquo;</p>
+            <p>If you believe in deep learning, <br />deep learning will believe in you.&rdquo;</p>
             <cite>Ilya Sutskever</cite>
           </blockquote>
         </div>
@@ -103,36 +103,46 @@ function HomePage() {
         </div>
       </section>
 
-      <section id="demo" className="robot-section">
-        <h2 className="demo-heading">{thisPolicy.name}</h2>
-        <BallPushDemo />
-        <p className="demo-link">
-          <a href={href("/policy")} onClick={navigate}>
-            <span>{thisPolicy.caption} · see how</span> <span aria-hidden="true">→</span>
-          </a>
-        </p>
+      <section id="demo" className="sec">
+        <h2>{thisPolicy.name}</h2>
+        <div className="sec-body">
+          <BallPushDemo />
+          <p className="demo-link">
+            <a href={href("/policy")} onClick={navigate}>
+              {thisPolicy.caption} · see how it works <span className="arrow" aria-hidden="true">→</span>
+            </a>
+          </p>
+        </div>
       </section>
 
-      <h2 className="strip-heading">Projects</h2>
-      <nav className="project-strip" aria-label="Featured projects">
-        {HOME_PROJECTS.map((slug) => {
-          const p = projects.find((x) => x.slug === slug)!;
-          return (
-            <a key={slug} className="strip-tile" href={href(`/projects#${slug}`)} onClick={navigate}>
-              {p.image ? (
-                <img src={p.image.src} alt="" loading="lazy" decoding="async" />
-              ) : (
-                <span className="strip-glyph">Coming soon</span>
-              )}
-              <span className="strip-title">{p.title}</span>
-              <span className="strip-when">{p.tagline ?? p.when}</span>
+      <section className="sec">
+        <h2>Projects</h2>
+        <ul className="shelf sec-body">
+          {HOME_PROJECTS.map((slug) => {
+            const p = projects.find((x) => x.slug === slug)!;
+            return (
+              <li key={slug}>
+                <a className="shelf-item" href={href(`/projects#${slug}`)} onClick={navigate}>
+                  {p.image ? (
+                    <img src={p.image.src} alt="" loading="lazy" decoding="async" />
+                  ) : (
+                    <span className="shelf-soon">Coming soon</span>
+                  )}
+                  <span className="shelf-title">{p.title}</span>
+                  <span className="shelf-desc">{p.tagline ?? p.summary}</span>
+                </a>
+              </li>
+            );
+          })}
+          <li>
+            <a className="shelf-item shelf-all" href={href("/projects")} onClick={navigate}>
+              <span className="shelf-title">
+                All {projects.length} projects <span className="arrow" aria-hidden="true">→</span>
+              </span>
             </a>
-          );
-        })}
-        <a className="strip-tile strip-all" href={href("/projects")} onClick={navigate}>
-          <span className="strip-title">All {projects.length} projects →</span>
-        </a>
-      </nav>
+          </li>
+        </ul>
+      </section>
     </>
   );
 }
@@ -153,9 +163,9 @@ function ProjectsPage() {
         </div>
       </section>
 
-      <section id="more">
+      <section id="more" className="sec">
         <h2>More projects</h2>
-        <div className="tile-grid">
+        <div className="tile-grid sec-body">
           {rest.map((p) => (
             <ProjectTile key={p.slug} p={p} />
           ))}

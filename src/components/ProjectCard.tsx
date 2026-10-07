@@ -8,7 +8,7 @@ export function FeaturedProject({ p }: { p: Project }) {
   const [open, setOpen] = useState(false);
   const id = useId();
   return (
-    <article className={`feature${p.image ? " has-image" : ""}`} id={p.slug}>
+    <article className={`feature${p.image || p.extra ? " has-image" : ""}`} id={p.slug}>
       <div className="feature-text">
         <h3 className="row-title">{p.title}</h3>
         <p className="feature-meta">{p.when}</p>
@@ -26,11 +26,18 @@ export function FeaturedProject({ p }: { p: Project }) {
               {open ? "− less" : "+ how it works"}
             </button>
             <div id={id} hidden={!open}>
-              <Details p={p} open={open} />
+              <Details p={p} open={open} inline={false} />
             </div>
           </>
         )}
       </div>
+      {p.extra === "shakespeare" && (
+        <figure className="feature-image feature-sampler">
+          <Suspense fallback={null}>
+            <ShakespeareSampler />
+          </Suspense>
+        </figure>
+      )}
       {p.image && (
         <figure className="feature-image">
           {p.image.href ? (
@@ -75,8 +82,9 @@ export function ProjectTile({ p }: { p: Project }) {
   );
 }
 
-/** Everything behind "how it works": status, write-up, numbers, stack. */
-function Details({ p, open }: { p: Project; open: boolean }) {
+/** Everything behind "how it works": status, write-up, numbers. */
+/** `inline`: render the Shakespeare sampler here (tiles); featured cards show it beside the text instead. */
+function Details({ p, open, inline = true }: { p: Project; open: boolean; inline?: boolean }) {
   return (
     <>
       {p.status && <p className="status-line"><span className="status status-inline">{p.status}</span></p>}
@@ -86,21 +94,12 @@ function Details({ p, open }: { p: Project; open: boolean }) {
           {p.points.map((x) => <li key={x}>{x}</li>)}
         </ul>
       )}
-      {p.extra === "shakespeare" && open && (
+      {inline && p.extra === "shakespeare" && open && (
         <Suspense fallback={null}>
           <ShakespeareSampler />
         </Suspense>
       )}
-      <Tags tags={p.tags} />
     </>
-  );
-}
-
-function Tags({ tags }: { tags: string[] }) {
-  return (
-    <ul className="tags">
-      {tags.map((t) => <li key={t}>{t}</li>)}
-    </ul>
   );
 }
 
