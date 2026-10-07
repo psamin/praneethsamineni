@@ -174,7 +174,7 @@ export const projects: Project[] = [
     summary: "Photograph an object and learn its Tamil word: Gemini Vision plus flashcards, quizzes and streaks.",
     details:
       "You photograph an object, Gemini Vision identifies it, and the app returns the English word, the Tamil word and a transliteration. Words go into a personal word bank that feeds flashcards, quizzes, streaks, achievements and stats. It has JWT auth and an admin dashboard. Built with Next.js 15, Flask, SQLAlchemy and Postgres.",
-    when: "2025–2026",
+    when: "Sep 2025",
     repo: gh("tamil-lens2.0"),
   },
   {
@@ -239,7 +239,7 @@ export const projects: Project[] = [
     summary: "Marketing and recruiting site for an SAP consulting firm.",
     details:
       "Home, services, story, recruitment (job listings) and contact pages, with an EmailJS contact form. Deployed on GitHub Pages under the firm's domain.",
-    when: "2025–2026",
+    when: "Jun 2025",
     repo: gh("fiskeritinc"),
     links: [{ label: "fiskeritinc.com", href: "https://fiskeritinc.com" }],
   },
@@ -249,7 +249,7 @@ export const projects: Project[] = [
     summary: "A terminal-style day planner for macOS, built for voice dictation.",
     details:
       "Dictated text is split into tasks on commas, periods and the words “then” and “next”. Times like “7am” or “from 2 to 3pm” are detected and the day is sorted by time. It has vim-style keys and one list per day, stored as local JSON. A Swift wrapper and a LaunchAgent keep it running. Zero dependencies.",
-    when: "Jun 2026",
+    when: "Mar 2026",
     repo: gh("tasks"),
   },
 ];
