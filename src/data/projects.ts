@@ -116,7 +116,6 @@ export const projects: Project[] = [
   },
   {
     slug: "intake",
-    featured: true,
     title: "AI voice intake platform",
     summary: "A production voice-AI platform that answers and places intake calls for personal-injury law firms.",
     details:
