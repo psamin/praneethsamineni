@@ -73,13 +73,13 @@ export default function PolicyExplainer({ back }: { back: ReactNode }) {
       <section>
         <h2>How it learned</h2>
         <p>
-          A hand-written <Term>expert policy</Term> generates actions by moving behind the ball and pushing it toward
-          the goal. The MLP policy is first trained with <Term>behavior cloning</Term> to imitate it:
+          A hand-coded controller serves as the <Term>expert policy</Term>. The MLP policy is first trained with{" "}
+          <Term>behavior cloning</Term> to match the expert's action at each state:
         </p>
         <Eq>
           <Pi />(<V>s</V>) ≈ <Pi star />(<V>s</V>)
         </Eq>
-        <p>using mean squared error:</p>
+        <p>Training then minimizes the error between the policy's action and the expert action:</p>
         <Eq>
           <V>L</V>(<V>θ</V>) = 𝔼<sub>
             <V>s</V>
@@ -87,16 +87,19 @@ export default function PolicyExplainer({ back }: { back: ReactNode }) {
           [ ‖ <Pi />(<V>s</V>) − <Pi star />(<V>s</V>) ‖<sup>2</sup> ]
         </Eq>
         <p>
-          Behavior cloning alone suffers from <Term>distribution shift</Term>: small errors move the learned policy
-          into states that were not in the original demonstrations. <Term>DAgger</Term> corrects this by repeatedly
-          collecting expert actions on the states the learned policy visits:
+          However, behavior cloning only trains on states from the original demonstrations. If the learned policy
+          makes a small mistake, it can reach states it has never seen before.
+        </p>
+        <p>
+          To correct for this, <Term>DAgger</Term> lets the learned policy roll out, labels the states it visits with
+          the expert policy, and retrains on the expanded dataset:
         </p>
         <Eq>
-          rollout <Pi /> → query <Pi star /> → aggregate data → retrain
+          rollout <Pi /> → label with <Pi star /> → retrain
         </Eq>
         <p>
-          This raised success from <b>{BC_ONLY_SUCCESS}% to {(meta.success_rate * 100).toFixed(1)}%</b> across{" "}
-          <b>{meta.eval_episodes.toLocaleString()} unseen random scenes</b>.
+          After this, success increased from <b>{BC_ONLY_SUCCESS}% to {(meta.success_rate * 100).toFixed(1)}%</b>{" "}
+          across <b>{meta.eval_episodes.toLocaleString()} unseen random scenes</b>.
         </p>
       </section>
 
@@ -107,7 +110,8 @@ export default function PolicyExplainer({ back }: { back: ReactNode }) {
             <p>The learned policy is a small multilayer perceptron:</p>
             <Eq>{meta.architecture}</Eq>
             <p>
-              The six inputs are <State /> and the two outputs are <Vel />. The forward pass is:
+              The six inputs are <State />, the x–y positions of the robot, ball, and goal, and the two outputs are{" "}
+              <Vel />, the velocity the robot should move at. The forward pass is:
             </p>
             <Eq>
               <V>a</V> = <V>W</V>
