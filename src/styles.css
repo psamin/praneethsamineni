@@ -958,11 +958,9 @@ a:hover .arrow {
 }
 
 .eq {
-  margin: 18px 0 0;
-  padding: 14px 0;
+  margin: 14px 0 0;
+  padding: 6px 0;
   overflow-x: auto;
-  border-top: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
   font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
   font-size: 22px;
   line-height: 1.6;
