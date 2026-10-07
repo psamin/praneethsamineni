@@ -1,30 +1,70 @@
-// "How it works" mini page for the home-page policy. Equations are plain HTML
-// (italics, sub/superscripts, fixed-size symbols), so they render the same
-// everywhere and nothing stretches or overlaps.
+// "How it works" page for the home-page policy. Equations are plain HTML
+// (italics, sub/superscripts, fixed-size symbols): no math library, and
+// nothing stretches or overlaps.
 import type { ReactNode } from "react";
 import C from "../robot/simConfig.json";
 import { policyMeta as meta, thisPolicy } from "../robot/policyInfo";
 
+// Behavior-cloning-only success of the shipped model (abs_32_bc in results/evaluation.json).
+const BC_ONLY_SUCCESS = 31.4;
+
 const Eq = ({ children }: { children: ReactNode }) => <p className="eq">{children}</p>;
 const V = ({ children }: { children: ReactNode }) => <i>{children}</i>;
+const Term = ({ children }: { children: ReactNode }) => <b className="term">{children}</b>;
+const Pi = ({ star }: { star?: boolean }) =>
+  star ? (
+    <>
+      π<sup>*</sup>
+    </>
+  ) : (
+    <>
+      π<sub>
+        <V>θ</V>
+      </sub>
+    </>
+  );
+const State = () => (
+  <>
+    (<V>x</V>
+    <sub>r</sub>, <V>y</V>
+    <sub>r</sub>, <V>x</V>
+    <sub>b</sub>, <V>y</V>
+    <sub>b</sub>, <V>x</V>
+    <sub>g</sub>, <V>y</V>
+    <sub>g</sub>)
+  </>
+);
+const Vel = () => (
+  <>
+    (<V>v</V>
+    <sub>x</sub>, <V>v</V>
+    <sub>y</sub>)
+  </>
+);
 
 export default function PolicyExplainer({ back }: { back: ReactNode }) {
-  const type = thisPolicy.type;
-  const pct = (meta.success_rate * 100).toFixed(1);
+  const isMlp = thisPolicy.type === "mlp";
   return (
     <article className="explainer">
       {back}
-      <h1 className="page-title">How the policy works</h1>
+      <h1 className="page-title">How it works</h1>
 
       <section>
-        <h2>What it does</h2>
+        <h2>How the policy works</h2>
         <p>
-          Every 33 ms the policy looks at three positions (the robot, the ball and the goal) and outputs the robot's
-          velocity. It wins when the ball stays inside the goal.
+          Every {Math.round(C.PHYSICS_DT * C.SUBSTEPS_PER_ACTION * 1000)} ms, the MLP policy reads the positions of the
+          robot, ball, and goal and outputs the robot's velocity.
         </p>
         <Eq>
-          <V>a</V> = π(<V>robot</V>, <V>ball</V>, <V>goal</V>)
+          <V>s</V> = <State />
         </Eq>
+        <Eq>
+          <V>a</V> = <Pi />(<V>s</V>) = <Vel />
+        </Eq>
+        <p>
+          A rollout succeeds when the ball stays within {C.GOAL_SUCCESS_RADIUS} units of the goal for{" "}
+          {C.SUCCESS_HOLD_STEPS} consecutive steps:
+        </p>
         <Eq>
           ‖<V>ball</V> − <V>goal</V>‖ ≤ {C.GOAL_SUCCESS_RADIUS}
         </Eq>
@@ -33,31 +73,41 @@ export default function PolicyExplainer({ back }: { back: ReactNode }) {
       <section>
         <h2>How it learned</h2>
         <p>
-          A hand-written controller plays teacher: it walks behind the ball and pushes it toward the goal. The network
-          never sees that code. It only learns to copy what the teacher does in each situation:
+          A hand-written <Term>expert policy</Term> generates actions by moving behind the ball and pushing it toward
+          the goal. The MLP policy is first trained with <Term>behavior cloning</Term> to imitate it:
         </p>
+        <Eq>
+          <Pi />(<V>s</V>) ≈ <Pi star />(<V>s</V>)
+        </Eq>
+        <p>using mean squared error:</p>
         <Eq>
           <V>L</V>(<V>θ</V>) = 𝔼<sub>
             <V>s</V>
-          </sub>{" "}
-          ‖ π<sub>
-            <V>θ</V>
           </sub>
-          (<V>s</V>) − π<sup>*</sup>(<V>s</V>) ‖<sup>2</sup>
+          [ ‖ <Pi />(<V>s</V>) − <Pi star />(<V>s</V>) ‖<sup>2</sup> ]
         </Eq>
         <p>
-          Copying alone drifts: one small mistake leads somewhere the teacher never went. So the network drives, the
-          teacher labels what it should have done, and it retrains on those corrections (DAgger). That took it from
-          about 30–50% to {pct}% of {meta.eval_episodes.toLocaleString()} unseen random scenes.
+          Behavior cloning alone suffers from <Term>distribution shift</Term>: small errors move the learned policy
+          into states that were not in the original demonstrations. <Term>DAgger</Term> corrects this by repeatedly
+          collecting expert actions on the states the learned policy visits:
+        </p>
+        <Eq>
+          rollout <Pi /> → query <Pi star /> → aggregate data → retrain
+        </Eq>
+        <p>
+          This raised success from <b>{BC_ONLY_SUCCESS}% to {(meta.success_rate * 100).toFixed(1)}%</b> across{" "}
+          <b>{meta.eval_episodes.toLocaleString()} unseen random scenes</b>.
         </p>
       </section>
 
       <section>
-        <h2>The network</h2>
-        {type === "mlp" && (
+        <h2>MLP policy</h2>
+        {isMlp ? (
           <>
+            <p>The learned policy is a small multilayer perceptron:</p>
+            <Eq>{meta.architecture}</Eq>
             <p>
-              A small multilayer perceptron, {meta.architecture}, with ReLU (σ) between layers:
+              The six inputs are <State /> and the two outputs are <Vel />. The forward pass is:
             </p>
             <Eq>
               <V>a</V> = <V>W</V>
@@ -69,46 +119,18 @@ export default function PolicyExplainer({ back }: { back: ReactNode }) {
               <sub>2</sub>) + <V>b</V>
               <sub>3</sub>
             </Eq>
-          </>
-        )}
-        {type === "diffusion" && (
-          <>
-            <p>{thisPolicy.summary} It is trained to predict the noise ε added to the teacher's next 8 actions:</p>
+            <p>with ReLU activations:</p>
             <Eq>
-              <V>L</V> = 𝔼 ‖ <V>ε</V> − <V>ε</V>
-              <sub>
-                <V>θ</V>
-              </sub>
-              (noisy actions, <V>s</V>, <V>k</V>) ‖<sup>2</sup>
+              σ(<V>x</V>) = max(0, <V>x</V>)
             </Eq>
           </>
-        )}
-        {type === "act" && (
-          <>
-            <p>{thisPolicy.summary} Each step's action averages every chunk that covers it:</p>
-            <Eq>
-              <V>a</V>
-              <sub>
-                <V>t</V>
-              </sub>{" "}
-              = Σ <V>w</V>
-              <sub>
-                <V>i</V>
-              </sub>{" "}
-              <V>A</V>
-              <sub>
-                <V>i</V>
-              </sub>
-              [<V>t</V>] / Σ <V>w</V>
-              <sub>
-                <V>i</V>
-              </sub>
-            </Eq>
-          </>
+        ) : (
+          <p>{thisPolicy.summary}</p>
         )}
         <p>
-          {meta.params.toLocaleString()} parameters, {(meta.weight_bytes / 1024).toFixed(1)} KB. It runs on your
-          device in about 30 lines of TypeScript: no GPU, no server, no ML library.
+          The policy has <b>{meta.params.toLocaleString()} parameters</b>, occupies about{" "}
+          <b>{(meta.weight_bytes / 1024).toFixed(1)} KB</b>, and runs entirely in the browser with TypeScript. No GPU,
+          server, or ML framework is required.
         </p>
       </section>
     </article>

@@ -940,10 +940,15 @@ a:hover .arrow {
 }
 
 .explainer h2 {
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   font-family: var(--display);
-  font-size: 30px;
+  font-size: 25px;
   font-style: italic;
+}
+
+.explainer .term {
+  font-weight: 600;
+  color: var(--accent);
 }
 
 .explainer p {
