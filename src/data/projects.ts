@@ -37,7 +37,7 @@ export const projects: Project[] = [
     featured: true,
     title: "Pam",
     tagline: "AI robot caregiver",
-    summary: "A memory-and-fetch assistant for older people: it remembers where you put things, and a robot arm brings them to you.",
+    summary: "An AI robot caregiver for older people: it remembers where you put things, and a robot arm brings them to you.",
     details:
       "A phone camera streams frames into a perception pipeline. YOLOE open-vocabulary detection and BoT-SORT tracking feed a “put-down gate” that fires when an object comes to rest, and Claude then describes where the object landed and logs it to memory. A voice agent (Deepgram STT/TTS over one WebSocket, with Claude tool calls) answers questions like “where are my pills?” It also handles medication doses and reminders, Google Calendar, face recognition and a caregiver dashboard. A 5-motor arm runs an ACT imitation policy: it grabs the bottle, turns, says “Here are your pills,” drops them in your hand and returns home.",
     points: [
@@ -70,9 +70,9 @@ export const projects: Project[] = [
     featured: true,
     title: "Instinct",
     tagline: "Danger-sensing smart jacket for first responders",
-    summary: "A smart jacket for EMTs and soldiers that watches their back while they focus on a patient, and buzzes when something's about to hit them.",
+    summary: "A smart jacket for EMTs and soldiers that tracks everything around them on a Tesla-style live map while they focus on a patient, and buzzes when something's about to hit them.",
     details:
-      "When a medic is doing CPR or assessing a patient, they can't see what's coming from behind. Instinct's cameras track people and objects around them, and a physics-based world model predicts time to collision and miss distance. A task-aware policy then decides whether the risk is worth interrupting them for. It ignores a bystander walking up to watch during CPR, for example, but flags someone closing in fast. Directional haptics in the jacket tell the wearer which way to move. It reasons only about physical motion, never about who looks “dangerous.” I built the phone rig: two iPhones (back and chest) running on-device MediaPipe with their own world models, directional sound and vibration through an Expo app, a CPR rate/pause monitor with a voice coach, and a GPS minimap dashboard.",
+      "When a medic is doing CPR or assessing a patient, they can't see what's coming from behind. Instinct's cameras track the people and objects around them and show them on a Tesla-style live map, and a physics-based world model predicts time to collision and miss distance. A task-aware policy then decides whether the risk is worth interrupting them for. It ignores a bystander walking up to watch during CPR, for example, but flags someone closing in fast. Directional haptics in the jacket tell the wearer which way to move. It reasons only about physical motion, never about who looks “dangerous.” I built the phone rig: two iPhones (back and chest) running on-device MediaPipe with their own world models, directional sound and vibration through an Expo app, a CPR rate/pause monitor with a voice coach, and a GPS minimap dashboard.",
     points: [
       "Verified end to end: live camera → tracking → prediction → policy → physical haptic cue",
       "Task-aware: the same approaching person triggers a cue during assessment but not during CPR",
