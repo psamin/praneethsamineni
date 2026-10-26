@@ -107,7 +107,7 @@ function HomePage() {
 
       <section className="bio">
         <p>
-          I'm a Computer Science and Mathematics double major at <L to="https://www.gatech.edu/">Georgia Tech</L>.
+          I'm a Computer Science and Mathematics double major at Georgia Tech.
         </p>
         <p>
           Currently, I'm contributing to <L to="https://github.com/NVIDIA/flashdreams">NVIDIA FlashDreams</L> to help solve
@@ -131,9 +131,7 @@ function HomePage() {
             middle schoolers across 3 states, and hosted a hackathon with 75+ participants.
           </li>
           <li>
-            Won multiple hackathons and software development competitions hosted by{" "}
-            <L to="https://www.ycombinator.com/">YC</L>, <L to="https://tsaweb.org/">TSA</L>, and{" "}
-            <L to="https://www.fbla.org/">FBLA</L>.
+            Won multiple hackathons and software development competitions hosted by YC, TSA, and FBLA.
           </li>
         </ul>
       </section>
