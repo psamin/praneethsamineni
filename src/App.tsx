@@ -88,6 +88,12 @@ export default function App() {
 }
 
 function HomePage() {
+  // brand / organisation link in the bio (opens in a new tab)
+  const L = ({ to, children }: { to: string; children: string }) => (
+    <a href={to} target="_blank" rel="noopener noreferrer">
+      {children}
+    </a>
+  );
   return (
     <>
       <section className="intro">
@@ -95,16 +101,46 @@ function HomePage() {
         <div>
           <p className="intro-hey">hey! my name is</p>
           <h1 className="intro-name">Praneeth Samineni</h1>
-          <p className="intro-line">
-            I'm currently double majoring in <strong>CS + Math</strong> at <strong>Georgia Tech</strong>, with a minor in{" "}
-            <strong>Robotics</strong>. I like messing with robotics and deep learning.
-          </p>
           <SocialIcons />
         </div>
       </section>
 
-      <section id="demo" className="sec sec-plain">
+      <section className="bio">
+        <p>
+          I'm a Computer Science and Mathematics double major at <L to="https://www.gatech.edu/">Georgia Tech</L>.
+        </p>
+        <p>
+          Currently, I'm contributing to <L to="https://github.com/NVIDIA/flashdreams">NVIDIA FlashDreams</L> to help solve
+          inference bottlenecks in world models, researching the mechanistic interpretability of World Action Models at{" "}
+          <L to="https://www.eleuther.ai/">EleutherAI</L>, working on LLM inference research at{" "}
+          <L to="https://sail.cc.gatech.edu/">Georgia Tech SAIL</L>, and building a humanoid robot from my dorm room.
+        </p>
+        <p>
+          My interests lie in combining high-level agentic control with low-level robot policies to quickly deploy
+          robots. I also post about what I'm learning every day on{" "}
+          <L to="https://x.com/praneethsamine">X</L>!
+        </p>
+        <p>Previously, I:</p>
+        <ul>
+          <li>
+            Worked as a Forward Deployed Engineer at <L to="https://wayco.ai/">Wayco AI</L> (YC W26), building voice AI
+            agents.
+          </li>
+          <li>
+            Founded a 501(c)(3) <L to="https://codingforachangenpo.org/">nonprofit</L> to teach Python and AI to 300+
+            middle schoolers across 3 states, and hosted a hackathon with 75+ participants.
+          </li>
+          <li>
+            Won multiple hackathons and software development competitions hosted by{" "}
+            <L to="https://www.ycombinator.com/">YC</L>, <L to="https://tsaweb.org/">TSA</L>, and{" "}
+            <L to="https://www.fbla.org/">FBLA</L>.
+          </li>
+        </ul>
+      </section>
+
+      <section id="demo" className="sec sec-plain demo-below">
         <div className="sec-body">
+          <p className="demo-title">This is a robot policy, live in your browser!</p>
           <BallPushDemo />
           <p className="demo-link">
             <a href={href("/policy")} onClick={navigate}>
@@ -115,41 +151,10 @@ function HomePage() {
           </p>
         </div>
       </section>
-
-      <section className="sec">
-        <h2>Projects</h2>
-        <ul className="shelf sec-body">
-          {HOME_PROJECTS.map((slug) => {
-            const p = projects.find((x) => x.slug === slug)!;
-            return (
-              <li key={slug}>
-                <a className="shelf-item" href={href(`/projects#${slug}`)} onClick={navigate}>
-                  {p.image ? (
-                    <img src={p.image.src} alt="" loading="lazy" decoding="async" />
-                  ) : (
-                    <span className="shelf-soon">Coming soon</span>
-                  )}
-                  <span className="shelf-title">{p.title}</span>
-                  <span className="shelf-desc">{p.tagline ?? p.summary}</span>
-                </a>
-              </li>
-            );
-          })}
-          <li>
-            <a className="shelf-item shelf-all" href={href("/projects")} onClick={navigate}>
-              <span className="shelf-title">
-                All {projects.length} projects <span className="arrow" aria-hidden="true">→</span>
-              </span>
-            </a>
-          </li>
-        </ul>
-      </section>
     </>
   );
 }
 
-/** Projects linked from the home page, in order. */
-const HOME_PROJECTS = ["pam", "colony", "instinct", "robotfpga"];
 
 function ProjectsPage() {
   const rest = projects.filter((p) => !p.featured);

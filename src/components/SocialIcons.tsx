@@ -1,4 +1,4 @@
-// Icon-only social links. Paths from Simple Icons (CC0).
+// Icon-only social links. Brand paths from Simple Icons (CC0); envelope from Material Icons (Apache 2.0).
 const LINKS = [
   {
     label: "GitHub",
@@ -15,13 +15,24 @@ const LINKS = [
     href: "https://x.com/praneethsamine",
     d: "M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z",
   },
+  {
+    label: "Email pi34@gatech.edu",
+    href: "mailto:pi34@gatech.edu",
+    d: "M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z",
+  },
 ];
 
 export default function SocialIcons() {
   return (
     <p className="socials">
       {LINKS.map((l) => (
-        <a key={l.label} href={l.href} target="_blank" rel="noopener noreferrer" aria-label={l.label} title={l.label}>
+        <a
+          key={l.label}
+          href={l.href}
+          {...(l.href.startsWith("mailto:") ? {} : { target: "_blank", rel: "noopener noreferrer" })}
+          aria-label={l.label}
+          title={l.label}
+        >
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d={l.d} />
           </svg>
